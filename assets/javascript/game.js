@@ -139,15 +139,15 @@ function shuffle(array) {
 }
   
 // Function to present a trivia question to user
-function presentQuestion (i) {
+function presentQuestion (num) {
     // Set global currentQ variable to question being presented
-    currentQ = tqs[i];
+    currentQ = tqs[num];
     // Present the question and the answer options
-    $("#question").text(tqs[i].question);
-    $("#op1").text(tqs[i].ans1);
-    $("#op2").text(tqs[i].ans2);
-    $("#op3").text(tqs[i].ans3);
-    $("#op4").text(tqs[i].ans4);
+    $("#question").text(tqs[num].question);
+    $("#op1").text(tqs[num].ans1);
+    $("#op2").text(tqs[num].ans2);
+    $("#op3").text(tqs[num].ans3);
+    $("#op4").text(tqs[num].ans4);
 }
 
 // Function to restart game
@@ -164,22 +164,13 @@ function checkAnswer (choice) {
     }
 }
 
-// Function to start game
-function executeGame () {
-    // present the first question,
-    // 
-    var i = 0;
-    presentQuestion(i);
-    // if user clicks on answer and answer = correct answer, then
-    
-    // present congrats answer div and 
-    // after two seconds, 
-    // i++
-    // and presentQuestion(i);
-};
-
 // When the page loads...
 $(document).ready( () => {
-    // Execute the game
-    executeGame();
+    // Hide the answer frame
+    $("#answer-frame").hide();
+    // Shuffle the array of trivia questions
+    tqs = shuffle(tqs);
+    // Present the first question
+    presentQuestion(qNum);
+
 });
