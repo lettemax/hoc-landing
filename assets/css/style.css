@@ -25,3 +25,7 @@
     font-size: 28px;
 }
 
+#op1:hover, #op2:hover, #op3:hover, #op4:hover {
+    background-color: lightgreen;
+}
+

@@ -22,7 +22,8 @@ var tq1 = {
     ans2: "Mike Meyers",
     ans3: "Madam Sandler",
     ans4: "Leonardo Dicaprio",
-    correctAns: "Leonardo Dicaprio"
+    correctAns: "Leonardo Dicaprio",
+    gif: leonardoGifSrc
 };
 var tq2 = {
     question: questions[1],
@@ -30,7 +31,8 @@ var tq2 = {
     ans2: "Sandra Bullock",
     ans3: "Mandy Moore",
     ans4: "Jennifer Aniston",
-    correctAns: "Jennifer Aniston"
+    correctAns: "Jennifer Aniston",
+    gif: "assets/images/jennifer_aniston.gif"
 };
 var tq3 = {
     question: questions[2],
@@ -38,7 +40,8 @@ var tq3 = {
     ans2: "Michael Jordan",
     ans3: "George Clooney",
     ans4: "Sandra Bullock",
-    correctAns: "Sandra Bullock"
+    correctAns: "Sandra Bullock",
+    gif: "assets/images/sandra_bullock.gif"
 };
 var tq4 = {
     question: questions[3],
@@ -46,7 +49,8 @@ var tq4 = {
     ans2: "Matt Damon",
     ans3: "Serena Williams",
     ans4: "Will Smith",
-    correctAns: "Will Smith"
+    correctAns: "Will Smith",
+    gif: "assets/images/will_smith.gif"
 };
 var tq5 = {
     question: questions[4],
@@ -54,7 +58,8 @@ var tq5 = {
     ans2: "Elon Musk",
     ans3: "Jennifer Lawrence",
     ans4: "Michelle Obama",
-    correctAns: "Tom Hanks"
+    correctAns: "Tom Hanks",
+    gif: "assets/images/tom_hanks.gif"
 };
 var tq6 = {
     question: questions[5],
@@ -62,7 +67,8 @@ var tq6 = {
     ans2: "Emma Stone",
     ans3: "Eva Longoria",
     ans4: "Natalie Portman",
-    correctAns: "Emma Stone"
+    correctAns: "Emma Stone",
+    gif: "assets/images/emma_stone.gif"
 };
 var tq7 = {
     question: questions[6],
@@ -70,7 +76,8 @@ var tq7 = {
     ans2: "Seth Rogen",
     ans3: "James Franco",
     ans4: "Jonah Hill",
-    correctAns: "Will Ferrell"
+    correctAns: "Will Ferrell",
+    gif: "assets/images/will_ferrell.gif"
 };
 var tq8 = {
     question: questions[7],
@@ -78,7 +85,8 @@ var tq8 = {
     ans2: "Leonardo Dicaprio",
     ans3: "Mahommad Similar",
     ans4: "Jim Carrey",
-    correctAns: "Jim Carrey"
+    correctAns: "Jim Carrey",
+    gif: "assets/images/jim_carrey.gif"
 };
 var tq9 = {
     question: questions[8],
@@ -86,7 +94,8 @@ var tq9 = {
     ans2: "Tessa Thompson",
     ans3: "Logan Browning",
     ans4: "Carrie Underwood",
-    correctAns: "Logan Browning"
+    correctAns: "Logan Browning",
+    gif: loganGifSrc
 };
 var tq10 = {
     question: questions[9],
@@ -94,11 +103,18 @@ var tq10 = {
     ans2: "Penelope Cruz",
     ans3: "Keira Knightley",
     ans4: "Jennifer Lawrence",
-    correctAns: "Jennifer Lawrence"
+    correctAns: "Jennifer Lawrence",
+    gif: "jennifer_lawrence.gif"
 };
 
 // Declare and fill array of trivia questions
 var tqs = [tq1, tq2, tq3, tq4, tq5, tq6, tq7, tq8, tq9, tq10];
+
+// Declare variable that will hold question being presented on screen
+var currentQ;
+
+// Declare variable to remember which question we're on
+var qNum = 0;
 
 // Function from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array)
 // to shuffle array [of trivia questions]
@@ -122,8 +138,11 @@ function shuffle(array) {
     return array;
 }
   
-// Function to present trivia question to user
+// Function to present a trivia question to user
 function presentQuestion (i) {
+    // Set global currentQ variable to question being presented
+    currentQ = tqs[i];
+    // Present the question and the answer options
     $("#question").text(tqs[i].question);
     $("#op1").text(tqs[i].ans1);
     $("#op2").text(tqs[i].ans2);
@@ -131,16 +150,36 @@ function presentQuestion (i) {
     $("#op4").text(tqs[i].ans4);
 }
 
-// Function to start game
-function startGame () {
+// Function to restart game
+function restart () {
+    // shuffle array of tqs
+    // present first question
+    // ...
+}
 
+// Function to check if answer is correct
+function checkAnswer (choice) {
+    if (choice == tqs[1]) {
+
+    }
+}
+
+// Function to start game
+function executeGame () {
+    // present the first question,
+    // 
+    var i = 0;
+    presentQuestion(i);
+    // if user clicks on answer and answer = correct answer, then
+    
+    // present congrats answer div and 
+    // after two seconds, 
+    // i++
+    // and presentQuestion(i);
 };
 
-// When page loads...
+// When the page loads...
 $(document).ready( () => {
-    // Shuffle the array of trivia questions
-    tqs = shuffle(tqs);
-    console.log(tqs);
-    // Execute trivia
-    //executeGame();
+    // Execute the game
+    executeGame();
 });
