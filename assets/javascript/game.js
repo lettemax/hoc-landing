@@ -16,7 +16,7 @@ var questions = ["Who played Jordan Belfort in Wolf of Wall Street?",
 
 
 // Creating trivia question objects
-var tq1 = {
+var q1 = {
     question: questions[0],
     ans1: "John Wayne",
     ans2: "Mike Meyers",
@@ -25,7 +25,7 @@ var tq1 = {
     correctAns: "Leonardo Dicaprio",
     gif: leonardoGifSrc
 };
-var tq2 = {
+var q2 = {
     question: questions[1],
     ans1: "John Wayne",
     ans2: "Sandra Bullock",
@@ -34,7 +34,7 @@ var tq2 = {
     correctAns: "Jennifer Aniston",
     gif: "assets/images/jennifer_aniston.gif"
 };
-var tq3 = {
+var q3 = {
     question: questions[2],
     ans1: "Kevin Costner",
     ans2: "Michael Jordan",
@@ -43,7 +43,7 @@ var tq3 = {
     correctAns: "Sandra Bullock",
     gif: "assets/images/sandra_bullock.gif"
 };
-var tq4 = {
+var q4 = {
     question: questions[3],
     ans1: "Stephen Curry",
     ans2: "Matt Damon",
@@ -52,7 +52,7 @@ var tq4 = {
     correctAns: "Will Smith",
     gif: "assets/images/will_smith.gif"
 };
-var tq5 = {
+var q5 = {
     question: questions[4],
     ans1: "Tom Hanks",
     ans2: "Elon Musk",
@@ -61,7 +61,7 @@ var tq5 = {
     correctAns: "Tom Hanks",
     gif: "assets/images/tom_hanks.gif"
 };
-var tq6 = {
+var q6 = {
     question: questions[5],
     ans1: "Jar Jar Binks",
     ans2: "Emma Stone",
@@ -70,7 +70,7 @@ var tq6 = {
     correctAns: "Emma Stone",
     gif: "assets/images/emma_stone.gif"
 };
-var tq7 = {
+var q7 = {
     question: questions[6],
     ans1: "Will Ferrell",
     ans2: "Seth Rogen",
@@ -79,7 +79,7 @@ var tq7 = {
     correctAns: "Will Ferrell",
     gif: "assets/images/will_ferrell.gif"
 };
-var tq8 = {
+var q8 = {
     question: questions[7],
     ans1: "Kim Rilarry",
     ans2: "Leonardo Dicaprio",
@@ -88,7 +88,7 @@ var tq8 = {
     correctAns: "Jim Carrey",
     gif: "assets/images/jim_carrey.gif"
 };
-var tq9 = {
+var q9 = {
     question: questions[8],
     ans1: "Elizabeth Thomas",
     ans2: "Tessa Thompson",
@@ -97,7 +97,7 @@ var tq9 = {
     correctAns: "Logan Browning",
     gif: loganGifSrc
 };
-var tq10 = {
+var q10 = {
     question: questions[9],
     ans1: "Terrence McKenna",
     ans2: "Penelope Cruz",
@@ -108,10 +108,10 @@ var tq10 = {
 };
 
 // Declare and fill array of trivia questions
-var tqs = [tq1, tq2, tq3, tq4, tq5, tq6, tq7, tq8, tq9, tq10];
+var qs = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10];
 
 // Declare variable to hold current question 
-var currentQ;
+var q;
 
 // Declare variable to hold index of current question
 var qInd = 0;
@@ -151,7 +151,7 @@ function checkAndShowAnswer (ans) {
     // Hide the answer-frame
     $("#question-frame").hide();
     // If user chose correct answer
-    if (ans == currentQ.correctAns) {
+    if (ans == q.correctAns) {
         // Show correct answer text and gif 
         $("#answer-correct").show();
         $("#correct-answer-gif").show();
@@ -168,21 +168,21 @@ function checkAndShowAnswer (ans) {
 
 // Function to present a trivia question to user
 function presentQuestion (ind) {
-    // Set global currentQ variable to question being presented
-    currentQ = tqs[ind];
+    // Set global q variable to question being presented
+    q = qs[ind];
     // Set the question and the answer options
-    $("#question").text(currentQ.question);
-    $("#op1").text(currentQ.ans1);
-    $("#op2").text(currentQ.ans2);
-    $("#op3").text(currentQ.ans3);
-    $("#op4").text(currentQ.ans4);
+    $("#question").text(q.question);
+    $("#op1").text(q.ans1);
+    $("#op2").text(q.ans2);
+    $("#op3").text(q.ans3);
+    $("#op4").text(q.ans4);
     // Show the question and answer options
     $("#question-frame").show();
     // Handle click-selection of answer, check clicked answer
-    $("#op1").click(checkAndShowAnswer(ans1));
-    $("#op2").click(checkAndShowAnswer(ans2));
-    $("#op3").click(checkAndShowAnswer(ans3));
-    $("#op4").click(checkAndShowAnswer(ans4));
+    $("#op1").click(checkAndShowAnswer(q.ans1));
+    $("#op2").click(checkAndShowAnswer(q.ans2));
+    $("#op3").click(checkAndShowAnswer(q.ans3));
+    $("#op4").click(checkAndShowAnswer(q.ans4));
 }
 
 // Function to restart game
@@ -191,7 +191,7 @@ function restart () {
     $("#question-frame").hide();
     $("#answer-frame").hide();
     // Shuffle the array of trivia questions
-    tqs = shuffle(tqs);
+    qs = shuffle(qs);
     // Set current question index to 0
     qInd = 0;
     // Present the first question
@@ -204,7 +204,7 @@ $(document).ready( () => {
     $("#question-frame").hide();
     $("#answer-frame").hide();
     // Shuffle the array of trivia questions
-    tqs = shuffle(tqs);
+    qs = shuffle(qs);
     // Present the first question
     presentQuestion(qInd);
     // Handle click of restart button
