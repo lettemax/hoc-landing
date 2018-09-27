@@ -10,7 +10,7 @@ var questions = ["Who played Jordan Belfort in Wolf of Wall Street?",
                 "Who plays the lead detective in the movie Catch Me If You Can?",
                 "Who co-stars in La La Land alongside the mysterious Ryan Gosling?",
                 "Who plays Brennan Huff in the movie, Step Brothers?",
-                "Whose name rhymes with Shmim Sharrey?",
+                "Whose name rhymes with Shmim Shmarrey?",
                 "Who stars in the popular Netflix series, Dear White People?",
                 "Who co-stars alongside Bradley Cooper in Silver Linings Playbook?"];
 
@@ -114,7 +114,10 @@ var qs = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10];
 var q;
 
 // Declare variable to hold index of current question
-var qInd = 0;
+var qIndex = 0;
+
+// Variable to keep track of whether or not user choice was correct
+var correct = false;
 
 // Function from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array)
 // to shuffle array [of trivia questions]
@@ -141,35 +144,52 @@ function shuffle(array) {
 // Function to move on to next trivia question
 function nextQ () {
     // Increment question index
-    qInd++;
+    qIndex++;
     // Present next question
-    presentQuestion(qInd);
+    presentQuestion(qIndex);
 }
 
-// Function to show answer frame
-function checkAndShowAnswer (ans) {
+// Function to check answer
+function showAnswer () {
+    console.log("checking answer***")
     // Hide the answer-frame
     $("#question-frame").hide();
     // If user chose correct answer
-    if (ans == q.correctAns) {
+    if (correct) {
+        // Show answer-frame
+         $("#answer-frame").show();
         // Show correct answer text and gif 
         $("#answer-correct").show();
         $("#correct-answer-gif").show();
     } else {
+        // Show answer-frame
+        $("#answer-frame").show();
         // Show incorrect answer text and gif
         $("#answer-doh").show();
         $("#doh-answer-gif").show();
     }
-    // Show answer-frame
-    $("#answer-frame").show();
     // Wait 2 seconds, then move on to next question
     setTimeout(nextQ(), 2000);
+    
+}
+// Function to show answer frame
+function checkAndShowAnswer (ans) {
+    if (ans == q.correctAns) {
+        correct=true;
+    } else {
+        correct=false;
+    }
+    setTimeout(showAnswer(), 200);
 }
 
 // Function to present a trivia question to user
-function presentQuestion (ind) {
+function presentQuestion () {
     // Set global q variable to question being presented
-    q = qs[ind];
+    q = qs[qIndex];
+    console.log("calling presentQuestion()");
+    console.log(q);
+    console.log("--------");
+
     // Set the question and the answer options
     $("#question").text(q.question);
     $("#op1").text(q.ans1);
@@ -179,10 +199,22 @@ function presentQuestion (ind) {
     // Show the question and answer options
     $("#question-frame").show();
     // Handle click-selection of answer, check clicked answer
-    $("#op1").click(checkAndShowAnswer(q.ans1));
-    $("#op2").click(checkAndShowAnswer(q.ans2));
-    $("#op3").click(checkAndShowAnswer(q.ans3));
-    $("#op4").click(checkAndShowAnswer(q.ans4));
+    $("#op1").click(function () {
+        console.log("op1 clicked___")
+        setTimeout(checkAndShowAnswer(q.ans1), 500);
+    });
+    $("#op2").click(function () {
+        console.log("op2 clicked___")
+        setTimeout(checkAndShowAnswer(q.ans2), 500);
+    });
+    $("#op3").click(function () {
+        console.log("op3 clicked___")
+        setTimeout(checkAndShowAnswer(q.ans3), 500);
+    });
+    $("#op4").click(function () {
+        console.log("op4 clicked___")
+        setTimeout(checkAndShowAnswer(q.ans4), 500);
+    });
 }
 
 // Function to restart game
@@ -193,20 +225,53 @@ function restart () {
     // Shuffle the array of trivia questions
     qs = shuffle(qs);
     // Set current question index to 0
-    qInd = 0;
+    qIndex = 0;
     // Present the first question
-    presentQuestion(qInd);
+    presentQuestion();
+}
+
+// Function to hide all game divs
+function hideGameDivs () {
+    $("#question-frame").hide();
+    $("#answer-frame").hide();
+    $("#correct-answer-gif").hide();
+    $("#doh-answer-gif").hide();
+    $("#answer-doh").hide();
+    $("#answer-correct").hide();
+}
+
+// Function to show question divs
+function showQuestionDivs () {
+    $("#question-frame").show();
+}
+
+// Function to hide question divs
+function hideQuestionDivs () {
+    $("#question-frame").hide();
+}
+
+// Function to show correct answer divs
+function showCorrectAnsDivs () {
+    $("#answer-frame").show();
+    $("#correct-answer-gif").show();
+    $("#answer-correct").show();
+}
+
+// Function to show doh answer divs
+function showDohAnsGifs () {
+    $("#answer-frame").show();
+    $("#doh-answer-gif").show();
+    $("#answer-doh").show();
 }
 
 // When the page loads...
 $(document).ready( () => {
     // Hide the question and answer frames
-    $("#question-frame").hide();
-    $("#answer-frame").hide();
+    hideGameDivs();
     // Shuffle the array of trivia questions
     qs = shuffle(qs);
     // Present the first question
-    presentQuestion(qInd);
+    presentQuestion();
     // Handle click of restart button
     $("#restart").click(restart);
 });
