@@ -110,11 +110,11 @@ var tq10 = {
 // Declare and fill array of trivia questions
 var tqs = [tq1, tq2, tq3, tq4, tq5, tq6, tq7, tq8, tq9, tq10];
 
-// Declare variable that will hold question being presented on screen
+// Declare variable to hold current question 
 var currentQ;
 
-// Declare variable to remember which question we're on
-var qNum = 0;
+// Declare variable to hold index of current question
+var qInd = 0;
 
 // Function from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array)
 // to shuffle array [of trivia questions]
@@ -138,39 +138,75 @@ function shuffle(array) {
     return array;
 }
   
+// Function to move on to next trivia question
+function nextQ () {
+    // Increment question index
+    qInd++;
+    // Present next question
+    presentQuestion(qInd);
+}
+
+// Function to show answer frame
+function checkAndShowAnswer (ans) {
+    // Hide the answer-frame
+    $("#question-frame").hide();
+    // If user chose correct answer
+    if (ans == currentQ.correctAns) {
+        // Show correct answer text and gif 
+        $("#answer-correct").show();
+        $("#correct-answer-gif").show();
+    } else {
+        // Show incorrect answer text and gif
+        $("#answer-doh").show();
+        $("#doh-answer-gif").show();
+    }
+    // Show answer-frame
+    $("#answer-frame").show();
+    // Wait 2 seconds, then move on to next question
+    setTimeout(nextQ(), 2000);
+}
+
 // Function to present a trivia question to user
-function presentQuestion (num) {
+function presentQuestion (ind) {
     // Set global currentQ variable to question being presented
-    currentQ = tqs[num];
-    // Present the question and the answer options
-    $("#question").text(tqs[num].question);
-    $("#op1").text(tqs[num].ans1);
-    $("#op2").text(tqs[num].ans2);
-    $("#op3").text(tqs[num].ans3);
-    $("#op4").text(tqs[num].ans4);
+    currentQ = tqs[ind];
+    // Set the question and the answer options
+    $("#question").text(currentQ.question);
+    $("#op1").text(currentQ.ans1);
+    $("#op2").text(currentQ.ans2);
+    $("#op3").text(currentQ.ans3);
+    $("#op4").text(currentQ.ans4);
+    // Show the question and answer options
+    $("#question-frame").show();
+    // Handle click-selection of answer, check clicked answer
+    $("#op1").click(checkAndShowAnswer(ans1));
+    $("#op2").click(checkAndShowAnswer(ans2));
+    $("#op3").click(checkAndShowAnswer(ans3));
+    $("#op4").click(checkAndShowAnswer(ans4));
 }
 
 // Function to restart game
 function restart () {
-    // shuffle array of tqs
-    // present first question
-    // ...
-}
-
-// Function to check if answer is correct
-function checkAnswer (choice) {
-    if (choice == tqs[1]) {
-
-    }
+    // Hide the question and answer frames
+    $("#question-frame").hide();
+    $("#answer-frame").hide();
+    // Shuffle the array of trivia questions
+    tqs = shuffle(tqs);
+    // Set current question index to 0
+    qInd = 0;
+    // Present the first question
+    presentQuestion(qInd);
 }
 
 // When the page loads...
 $(document).ready( () => {
-    // Hide the answer frame
+    // Hide the question and answer frames
+    $("#question-frame").hide();
     $("#answer-frame").hide();
     // Shuffle the array of trivia questions
     tqs = shuffle(tqs);
     // Present the first question
-    presentQuestion(qNum);
-
+    presentQuestion(qInd);
+    // Handle click of restart button
+    $("#restart").click(restart);
 });
