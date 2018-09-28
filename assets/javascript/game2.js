@@ -140,152 +140,132 @@ function shuffle(array) {
     } 
     return array;
 }
-  
-// Function to hide all game divs
-function hideQuestionFrame () {
-    $("#question-frame").hide();
-    $("#answer-frame").hide();
-    $("#correct-answer-gif").hide();
-    $("#doh-answer-gif").hide();
-    $("#answer-doh").hide();
-    $("#answer-correct").hide();
-}
 
-// Function to hide all ans divs
-function hideAnsDivs () {
-    $("#answer-frame").hide();
-    $("#correct-answer-gif").hide();
-    $("#doh-answer-gif").hide();
-    $("#answer-doh").hide();
-    $("#answer-correct").hide();
-}
-
-// Function to show question divs
-function showQuestionDivs () {
-    $("#question-frame").show();
-}
-
-// Function to hide question divs
-function hideQuestionDivs () {
-    $("#question-frame").hide();
-}
-
-// Function to show correct answer divs
-function showCorrectAnsDivs () {
+// Function to show divs when user answers correctly
+function showCorrectDivs () {
+    console.log("Showing correct divs");
     $("#answer-frame").show();
-    $("#correct-answer-gif").show();
     $("#answer-correct").show();
+    $("#correct-answer-gif").show();
 }
 
-// Function to show doh answer divs
-function showDohAnsGifs () {
+// Function to hide correct answer divs 
+function hideCorrectDivs () {
+    console.log("Hiding correct divs");
+    $("#answer-frame").hide();
+    $("#answer-correct").hide();
+    $("#correct-answer-gif").hide();
+}
+
+// Function to show divs when user answers incorrectly
+function showDohDivs () {
+    console.log("Showing doh divs");
     $("#answer-frame").show();
-    $("#doh-answer-gif").show();
     $("#answer-doh").show();
+    $("#doh-answer-gif").show();
 }
 
-// Function to check answer 
+// Function to show divs when user answers incorrectly
+function hideDohDivs () {
+    console.log("Hiding doh divs");
+    $("#answer-frame").hide();
+    $("#answer-doh").hide();
+    $("#doh-answer-gif").hide();
+}
+
+// Function to enable answer option clicking
+function enableClicking () {
+    $('#op1').attr("disabled", false);
+    $('#op2').attr("disabled", false);
+    $('#op3').attr("disabled", false);
+    $('#op4').attr("disabled", false);
+}
+
+// Function to check if answer is correct
 function checkAnswer (ans) {
-    if (ans == q.correctAns) {
-        correct=true;
+    if (q.correctAns==ans) {
+        correct = true;
     } else {
-        correct=false;
+        correct = false;
+    }    
+    // If correct, then we want to show the user 
+    // the appropriate divs, hiding the question divs first
+    $("#question-frame").hide();
+    if (correct) {
+        // Log the result
+        console.log("correct");
+        // Show the correct divs
+        showCorrectDivs();
+        // After 2 seconds, hide the correct divs
+        setTimeout(function () {hideCorrectDivs()}, 2000);
+        // Increment the question index by 1
+        qIndex++;
+        // After 2.1 seconds, present the next question
+        setTimeout(function () {presentQuestion()}, 2100);
+    } else {
+        // Log the result
+        console.log("incorrect");
+        // Show the doh divs
+        showDohDivs();
+        // After 2 seconds, hide the doh divs
+        setTimeout(function () {hideDohDivs()}, 2000);
+        // Increment the question index by 1
+        qIndex++;
+        // After 2.1 seconds, present the next question
+        setTimeout(function () {presentQuestion()}, 2100);
     }
-    setTimeout(showAnswer(), 200);
-    (console.log("showed answer: result is "+correct));
 }
 
-// Function to present a trivia question to user
+// Function to present a question 
 function presentQuestion () {
-    // Make sure all ans divs are hidden
-    hideAnsDivs();
-    // Set global q variable to question being presented
+    // We want to present the question at the current index, qIndex
+    // So we set the current question to 
     q = qs[qIndex];
-    console.log("--------");
-    console.log("presentQuestion yields: "+q);
-    console.log("--------");
-
-    // Set the question and the answer options
+    console.log("presenting question: "+q.question);
+    // Then we fill the html elements  
+    // with the question and the four answer options
     $("#question").text(q.question);
     $("#op1").text(q.ans1);
     $("#op2").text(q.ans2);
     $("#op3").text(q.ans3);
     $("#op4").text(q.ans4);
-    // Show the question and answer options
-    showQuestionDivs();
-    // Handle click-selection of answer, check clicked answer
+    // The question-frame div is hidden, so we must show it
+    $("#question-frame").show();
+    // Now we should have presented the question
+    // So now we should prepare to handle the event of
+    // a user clicking on an answer 
     $("#op1").click(function () {
-        console.log("op1 clicked___")
-        setTimeout(checkAnswer(q.ans1), 800);
+        $('#op1').attr("disabled", true);
+        console.log($('#op1').attr("disabled"));
+        // $('#op1').attr("enabled", true);
+        // console.log($('#op1').attr("enabled"));
+        console.log("op1 clicked___");
+        checkAnswer(q.ans1);
     });
     $("#op2").click(function () {
-        console.log("op2 clicked___")
-        setTimeout(checkAnswer(q.ans2), 800);
+        $('#op2').attr("disabled", true);
+        console.log("op2 clicked___");
+        checkAnswer(q.ans2);
     });
     $("#op3").click(function () {
-        console.log("op3 clicked___")
-        setTimeout(checkAnswer(q.ans3), 800);
+        $('#op3').attr("disabled", true);
+        console.log("op3 clicked___");
+        checkAnswer(q.ans3);
     });
     $("#op4").click(function () {
-        console.log("op4 clicked___")
-        setTimeout(checkAnswer(q.ans4), 800);
+        $('#op4').attr("disabled", true);
+        console.log("op4 clicked___");
+        checkAnswer(q.ans4);
     });
-}
-// Function to move on to next trivia question
-function nextQ () {
-    // Increment question index
-    qIndex++;
-    // Present next question
-    presentQuestion(qIndex);
-}
-
-// Function to fill and show answer div
-function showAnswer () {
-    console.log("checking answer***")
-    // Hide the question divs
-    hideQuestionDivs();
-    // If user selected correct answer
-    if (correct) {
-        // Show answer-frame with 'correct' divs
-        $("#answer-frame").show();
-        // Hide doh divs, show correct divs
-        $("#answer-doh").hide();
-        $("#doh-answer-gif").hide();
-        $("#answer-correct").show();
-        $("#correct-answer-gif").show();       
-    } else {
-        // Show answer-frame with 'doh' divs
-        $("#answer-frame").show();
-        // Hide correct divs, show doh's
-        $("#answer-correct").hide();
-        $("#correct-answer-gif").hide();
-        $("#answer-doh").show();
-        $("#doh-answer-gif").show();
-    }
-    // Wait 2 seconds, then move on to next question
-    setTimeout(nextQ(), 2000);
-}
-
-// Function to restart game
-function restart () {
-    // Hide the question and answer frames
-    hideGameDivs();
-    // Shuffle the array of trivia questions
-    qs = shuffle(qs);
-    // Set current question index to 0
-    qIndex = 0;
-    // Present the first question
-    presentQuestion();
 }
 
 // When the page loads...
 $(document).ready( () => {
-    // Hide the question and answer frames
-    hideGameDivs();
-    // Shuffle the array of trivia questions
+    // We want to show a random question
+    // So we'll shuffle the array of questions
     qs = shuffle(qs);
-    // Present the first question
+    // And then present the question frame
     presentQuestion();
     // Handle click of restart button
-    $("#restart").click(restart);
+    // $("#restart").click(restart);
 });
