@@ -179,6 +179,7 @@ function hideAllDivs () {
     $("#game-over-frame").hide();
     $("#game-win-frame").hide();
     $("#time-up-frame").hide();
+    $("#timer").hide();
 }
 
 // Function to check if answer is correct
@@ -202,6 +203,8 @@ function checkAnswer (ans) {
             console.log("-----");
             // Increment correctAnswers
             correctAnswers++;
+            // Stop timer
+            stop();
             // Present correct-answer div
             console.log("about to present div2***")
             presentDiv(2);
@@ -213,6 +216,8 @@ function checkAnswer (ans) {
             console.log("-----");
             console.log("incorrect, index: "+index);
             console.log("-----");
+            // Stop timer
+            stop();
             // Present incorrect-answer-div
             console.log("about to present div3***")
             presentDiv(3);
@@ -222,9 +227,12 @@ function checkAnswer (ans) {
 
 // Function to decrement timer and update timer div
 function updateTimer () {
+    console.log("-----");
+    console.log("call updateTimer");
     //  Decrease time by one.
     time--;
-
+    console.log("time: "+time);
+    console.log("-----");
     //  update timer div
     $("#timer").text(time);
 
@@ -270,7 +278,7 @@ function presentDiv(dd) {
         console.log(currentQuestion.question);
         // Increment index, so next time present div 1,
         // will present next question
-        console.log("index: "+index);
+        console.log("index: ("+index+")");
         console.log("-----");
         // Fill question and answer option rows
         $("#question").text(currentQuestion.question);
@@ -278,35 +286,46 @@ function presentDiv(dd) {
         $("#op2").text(currentQuestion.ans2);
         $("#op3").text(currentQuestion.ans3);
         $("#op4").text(currentQuestion.ans4);
-        // Show the filled div
+        // Set time to ten
+        time = 10;
+        // Show timer starting at 10
+        $("#timer").text(10);
+        $("#timer").show();
+        // Show the filled question div
         $("#question-frame").show();
         // Start timer
-        time = 10;
-        // time = 10 seconds,
-        intervalId = setInterval(updateTimer, 1000);
+        run();
+        // show timer
         // every 1 second, decrease time by 1 and update div
         // When user clicks an option,
         // Check the answer for correctness
         
-        $("#op1").mouseup(function(){
-            // if currentquestion == lastquestion, don't run this
-            console.log("clicked op1");
-            checkAnswer(currentQuestion.ans1);
+        $("#op1").one("click", function(){
+            if (!currentQuestion.checked) { 
+                console.log("clicked op1");
+                checkAnswer(currentQuestion.ans1);
+            }
         });
         // don't run this twice for the same index
-        $("#op2").mouseup(function(){
-            console.log("clicked op2");
-            checkAnswer(currentQuestion.ans2);
+        $("#op2").one("click", function(){
+            if (!currentQuestion.checked) { 
+                console.log("clicked op2");
+                checkAnswer(currentQuestion.ans2);
+            }
         });
 
-        $("#op3").mouseup(function(){
-            console.log("clicked op3");
-            checkAnswer(currentQuestion.ans3);
+        $("#op3").one("click", function(){
+            if (!currentQuestion.checked) { 
+                console.log("clicked op3");
+                checkAnswer(currentQuestion.ans3);
+            }
         });
 
-        $("#op4").mouseup(function(){
-            console.log("clicked op4");
-            checkAnswer(currentQuestion.ans4);
+        $("#op4").one("click", function(){
+            if (!currentQuestion.checked) { 
+                console.log("clicked op4");
+                checkAnswer(currentQuestion.ans4);
+            }
         });
     } else if (dd == 2) {
         hideAllDivs();
@@ -325,6 +344,7 @@ function presentDiv(dd) {
     } else if (dd == 3) {
         hideAllDivs();
         console.log("showing incorrect answer frame");
+        $("#answer-doh").text("The correct answer was " + currentQuestion.correctAns);
         $("#incorrect-answer-frame").show();
         if (index < qs.length) {
             setTimeout(function() {hideAllDivs()}, 2000);
@@ -336,7 +356,7 @@ function presentDiv(dd) {
     } else if (dd == 4) {
         hideAllDivs();
         console.log("showing game over frame");
-        $("#game-over-frame").text("You got "+correctAnswers+" out of 10. Better luck next time");
+        $("#game-over-frame").text("You got " + correctAnswers + " out of 10. Better luck next time");
         $("#game-over-frame").show();
         $("#restart").show();
         $("#restart").mouseup(function(){restart()});
@@ -350,6 +370,19 @@ function presentDiv(dd) {
     else if (dd == 6) {
         hideAllDivs();
         console.log("showing time up frame");
+        $("#time-up-1").text("TIME'S UP");
+        $("#time-up-2").text("The correct answer was " + currentQuestion.correctAns);
+        // convert correctAns to celeb gif file
+        // replace spaces with underscores
+        // var str = currentQuestion.correctAns.replace(/\s+/g, '_');
+        // // set to lowercase
+        // str = str.toLowerCase();
+        // // add .gif to end
+        // str+=".gif";
+        // console.log(str);
+        // // update source of img element
+        // $("#celeb-gif").attr("src", str);
+
         $("#time-up-frame").show();
         index++;
         if (index < qs.length) {
@@ -371,6 +404,8 @@ function restart () {
     correctAnswers = 0;
     index = 0;
     desiredDiv = 1;
+    // Clear intervalId
+    stop();
     // Reshuffle the questions
     qs = shuffle(qs);
     // Reset time to 10
