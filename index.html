@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Movie Trivia</title>
+    <title>Celebrity Trivia</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -20,9 +20,9 @@
             <div class="row" id="op3">c</div>
             <div class="row" id="op4">d</div>
             <div class="row">
-                <div class="col-md-4">
-                    <button>restart</button>
-                </div class="col-md-7">
+                <div class="col-md-6">
+                    <button id="restart">restart</button>
+                </div class="col-md-6">
                     <div id="timer">
                         10 
                     </div>
@@ -48,9 +48,14 @@
             </div>
         </div>
         <div id="game-win-frame">
-            <div class="row" id="game-win"></div>
+            <div class="row" id="game-win">You answered all ten questions correctly</div>
             <div id="game-win-gif">
                 <img src="assets/images/game-win.gif">
+            </div>
+        </div>
+        <div id="time-up-frame">
+            <div class="row">
+                <h1 text-align="center">TIME'S UP</h1>
             </div>
         </div>
     </div>

@@ -23,7 +23,8 @@ var q1 = {
     ans3: "Madam Sandler",
     ans4: "Leonardo Dicaprio",
     correctAns: "Leonardo Dicaprio",
-    gif: leonardoGifSrc
+    gif: leonardoGifSrc,
+    checked: false
 };
 var q2 = {
     question: questions[1],
@@ -32,7 +33,8 @@ var q2 = {
     ans3: "Mandy Moore",
     ans4: "Jennifer Aniston",
     correctAns: "Jennifer Aniston",
-    gif: "assets/images/jennifer_aniston.gif"
+    gif: "assets/images/jennifer_aniston.gif",
+    checked: false
 };
 var q3 = {
     question: questions[2],
@@ -41,7 +43,8 @@ var q3 = {
     ans3: "George Clooney",
     ans4: "Sandra Bullock",
     correctAns: "Sandra Bullock",
-    gif: "assets/images/sandra_bullock.gif"
+    gif: "assets/images/sandra_bullock.gif",
+    checked: false
 };
 var q4 = {
     question: questions[3],
@@ -50,7 +53,8 @@ var q4 = {
     ans3: "Serena Williams",
     ans4: "Will Smith",
     correctAns: "Will Smith",
-    gif: "assets/images/will_smith.gif"
+    gif: "assets/images/will_smith.gif",
+    checked: false
 };
 var q5 = {
     question: questions[4],
@@ -59,7 +63,8 @@ var q5 = {
     ans3: "Jennifer Lawrence",
     ans4: "Michelle Obama",
     correctAns: "Tom Hanks",
-    gif: "assets/images/tom_hanks.gif"
+    gif: "assets/images/tom_hanks.gif",
+    checked: false
 };
 var q6 = {
     question: questions[5],
@@ -68,7 +73,8 @@ var q6 = {
     ans3: "Eva Longoria",
     ans4: "Natalie Portman",
     correctAns: "Emma Stone",
-    gif: "assets/images/emma_stone.gif"
+    gif: "assets/images/emma_stone.gif",
+    checked: false
 };
 var q7 = {
     question: questions[6],
@@ -77,7 +83,8 @@ var q7 = {
     ans3: "James Franco",
     ans4: "Jonah Hill",
     correctAns: "Will Ferrell",
-    gif: "assets/images/will_ferrell.gif"
+    gif: "assets/images/will_ferrell.gif",
+    checked: false
 };
 var q8 = {
     question: questions[7],
@@ -86,7 +93,8 @@ var q8 = {
     ans3: "Mahommad Similar",
     ans4: "Jim Carrey",
     correctAns: "Jim Carrey",
-    gif: "assets/images/jim_carrey.gif"
+    gif: "assets/images/jim_carrey.gif",
+    checked: false
 };
 var q9 = {
     question: questions[8],
@@ -95,7 +103,8 @@ var q9 = {
     ans3: "Logan Browning",
     ans4: "Carrie Underwood",
     correctAns: "Logan Browning",
-    gif: loganGifSrc
+    gif: loganGifSrc,
+    checked: false
 };
 var q10 = {
     question: questions[9],
@@ -104,7 +113,8 @@ var q10 = {
     ans3: "Keira Knightley",
     ans4: "Jennifer Lawrence",
     correctAns: "Jennifer Lawrence",
-    gif: "jennifer_lawrence.gif"
+    gif: "jennifer_lawrence.gif",
+    checked: false
 };
 
 // Declare and fill array of trivia questions
@@ -124,6 +134,19 @@ var correctAnswer;
 
 // Declare variable to hold number of correct answers, when == 10 => game won!
 var correctAnswers = 0;
+
+// Declare variable to prevent click function from executing more than once off of one click
+var mouseStop = true;
+
+// Declare variable to keep track of last question
+var lastQuestion;
+
+// Declare variable to keep track of seconds left in timer
+var time = 10;
+
+// Declare variable for interval
+var intervalId;
+
 
 // Function from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array)
 // to shuffle array [of trivia questions]
@@ -149,63 +172,106 @@ function shuffle(array) {
 
 // Function to hide all divs
 function hideAllDivs () {
+    console.log("hiding all divs");
     $("question-frame").hide();
     $("#incorrect-answer-frame").hide();
     $("#correct-answer-frame").hide()
     $("#game-over-frame").hide();
     $("#game-win-frame").hide();
-}
-
-// Function to check if game should end
-function checkGameEnd () {
-    // if answered ten questions
-    if (correctAnswers == qs.length) {
-        // Show game-win div
-        presentDiv(5);
-    } else {
-        // Show game-over div
-        presentDiv(4);
-    }
+    $("#time-up-frame").hide();
 }
 
 // Function to check if answer is correct
 function checkAnswer (ans) {
-    // Increment index
-    index++;
-    // Check if answered correctly, assign true or false to 'correct' variable
-    if (currentQuestion.correctAns == ans) {
-        correct = true;
-    } else {
-        correct = false;
-    }    
-    // Present appropriate div
-    if (correct) {
-        // Log the result
-        console.log("correct");
-        // Increment correctAnswers
-        correctAnswers++;
-        // Present correct-answer div
-        presentDiv(2);
-        // If all questions answered, check for game end
-    } else {
-        // Log the result
-        console.log("incorrect");
-        // Present incorrect-answer-div
-        presentDiv(3);
-    }
-    // Check if gameEnd call needed
-    if (index == qs.length) {
-        checkGameEnd();
+    if (!currentQuestion.checked) {
+        currentQuestion.checked = true;
+        console.log("checking answer");
+        // Check if answered correctly, assign true or false to 'correct' variable
+        if (currentQuestion.correctAns == ans) {
+            correct = true;
+        } else {
+            correct = false;
+        }    
+        // Present appropriate div
+        if (correct) {
+            // Increment index
+            index++;
+            // Log the result
+            console.log("-----");
+            console.log("correct, index: "+index);
+            console.log("-----");
+            // Increment correctAnswers
+            correctAnswers++;
+            // Present correct-answer div
+            console.log("about to present div2***")
+            presentDiv(2);
+            // If all questions answered, check for game end
+        } else {
+            // Increment index
+            index++;
+            // Log the result
+            console.log("-----");
+            console.log("incorrect, index: "+index);
+            console.log("-----");
+            // Present incorrect-answer-div
+            console.log("about to present div3***")
+            presentDiv(3);
+        }
     }
 }
 
+// Function to decrement timer and update timer div
+function updateTimer () {
+    //  Decrease time by one.
+    time--;
+
+    //  update timer div
+    $("#timer").text(time);
+
+
+    //  Once number hits zero...
+    if (time === 0) {
+
+      //  ...run the stop function.
+      stop();
+
+      //  Alert the user that time is up.
+      presentDiv(6);
+      // Reset time to 10
+      time = 10;
+      // Update timer div
+      $("#timer").text(time);
+    }
+}
+
+// Function to start timer
+function run() {
+    clearInterval(intervalId);
+    intervalId = setInterval(updateTimer, 1000);
+}
+
+// Function to stop timer
+function stop() {
+    //  Clears our intervalId
+    //  We just pass the name of the interval
+    //  to the clearInterval function.
+    clearInterval(intervalId);
+  }
+
+// Function to present desired div
 function presentDiv(dd) {
-    // Hide all divs
-    hideAllDivs();
     // We want to present the desired div
     if (dd == 1) {
+        hideAllDivs();
+        console.log("-----");
+        console.log("presenting div 1");
         // Set current question according to index
         currentQuestion = qs[index];
+        console.log(currentQuestion.question);
+        // Increment index, so next time present div 1,
+        // will present next question
+        console.log("index: "+index);
+        console.log("-----");
         // Fill question and answer option rows
         $("#question").text(currentQuestion.question);
         $("#op1").text(currentQuestion.ans1);
@@ -213,70 +279,117 @@ function presentDiv(dd) {
         $("#op3").text(currentQuestion.ans3);
         $("#op4").text(currentQuestion.ans4);
         // Show the filled div
-        $("question-frame").show();
+        $("#question-frame").show();
+        // Start timer
+        time = 10;
+        // time = 10 seconds,
+        intervalId = setInterval(updateTimer, 1000);
+        // every 1 second, decrease time by 1 and update div
         // When user clicks an option,
         // Check the answer for correctness
+        
         $("#op1").mouseup(function(){
-            console.log("op1 clicked___");
+            // if currentquestion == lastquestion, don't run this
+            console.log("clicked op1");
             checkAnswer(currentQuestion.ans1);
         });
+        // don't run this twice for the same index
         $("#op2").mouseup(function(){
-            console.log("op2 clicked___");
+            console.log("clicked op2");
             checkAnswer(currentQuestion.ans2);
         });
+
         $("#op3").mouseup(function(){
-            console.log("op3 clicked___");
+            console.log("clicked op3");
             checkAnswer(currentQuestion.ans3);
         });
+
         $("#op4").mouseup(function(){
-            console.log("op4 clicked___");
+            console.log("clicked op4");
             checkAnswer(currentQuestion.ans4);
         });
     } else if (dd == 2) {
+        hideAllDivs();
+        console.log("showing correct answer frame");
         $("#correct-answer-frame").show();
         if (index < qs.length) {
             setTimeout(function() {hideAllDivs()}, 2000);
-            setTimeout(function() {presentDiv(1)}, 2100);
+            setTimeout(function() {presentDiv(1)}, 2000);
         } else if (correctAnswers == qs.length) {
             setTimeout(function() {hideAllDivs()}, 2000);
-            setTimeout(function() {presentDiv(5)}, 2100);
+            setTimeout(function() {presentDiv(5)}, 2000);
         } else {
             setTimeout(function() {hideAllDivs()}, 2000);
-            setTimeout(function() {presentDiv(4)}, 2100);
+            setTimeout(function() {presentDiv(4)}, 2000);
         }
     } else if (dd == 3) {
+        hideAllDivs();
+        console.log("showing incorrect answer frame");
         $("#incorrect-answer-frame").show();
         if (index < qs.length) {
             setTimeout(function() {hideAllDivs()}, 2000);
-            setTimeout(function() {presentDiv(1)}, 2100);
+            setTimeout(function() {presentDiv(1)}, 2000);
         } else {
             setTimeout(function() {hideAllDivs()}, 2000);
-            setTimeout(function() {presentDiv(4)}, 2100);
+            setTimeout(function() {presentDiv(4)}, 2000);
         }
     } else if (dd == 4) {
+        hideAllDivs();
+        console.log("showing game over frame");
+        $("#game-over-frame").text("You got "+correctAnswers+" out of 10. Better luck next time");
         $("#game-over-frame").show();
+        $("#restart").show();
+        $("#restart").mouseup(function(){restart()});
     } else if (dd == 5) {
+        hideAllDivs();
+        console.log("showing game win frame");
         $("#game-win-frame").show();
+        $("#restart").show();
+        $("#restart").mouseup(function(){restart()});
+    } 
+    else if (dd == 6) {
+        hideAllDivs();
+        console.log("showing time up frame");
+        $("#time-up-frame").show();
+        index++;
+        if (index < qs.length) {
+            setTimeout(function() {hideAllDivs()}, 2000);
+            setTimeout(function() {presentDiv(1)}, 2000);
+        } else {
+            setTimeout(function() {hideAllDivs()}, 2000);
+            setTimeout(function() {presentDiv(4)}, 2000);
+        }
     } 
 }
 
 // Function to restart game
 function restart () {
+    console.log("restarting");
+    // Hide restart button
+    $("#restart").hide();
+    // Set correct answers and index back to 0 and desiredDiv back to 1
     correctAnswers = 0;
     index = 0;
     desiredDiv = 1;
+    // Reshuffle the questions
     qs = shuffle(qs);
+    // Reset time to 10
+    time = 10;
+    // Reset checked property of each question to false
+    for (var i = 0; i < qs.length; i++) {
+        qs[i].checked = false;
+    }
+    // Present the div to show the first question
     presentDiv(desiredDiv);
 }
 
 // When the page loads...
 $(document).ready( function() {
+    console.log("document ready");
     // All divs are hidden
     // We want to show a random question,
     // So we'll shuffle the array of questions
     qs = shuffle(qs);
     // Then present the desired div
     presentDiv(desiredDiv);
-    // Handle click of restart button
-    $("#restart").click(restart);
 });
